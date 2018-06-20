@@ -1,0 +1,36 @@
+version: "3.2"
+services:
+  elasticsearch:
+    image: elastic_smd7:v1
+    privileged: true
+    ports:
+      - "9200:9200"
+    volumes: [ '/sys/fs/cgroup:/sys/fs/cgroup:ro']
+   # deploy:
+    #  mode: global
+    networks:
+      hostnet: {}
+    
+  logstash:
+    image: logstash_smd7:v1
+    privileged: true
+    ports:
+      - "5044:5044"
+    volumes: [ '/sys/fs/cgroup:/sys/fs/cgroup:ro']
+    networks:
+      hostnet: {}
+    depends_on: ['elasticsearch']
+
+  kibana:
+    image: kibana_smd7:v1
+    privileged: true
+    ports:
+      - "5601:5601"
+    volumes: [ '/sys/fs/cgroup:/sys/fs/cgroup:ro']
+    networks:
+      hostnet: {}
+
+    depends_on: ['elasticsearch']
+
+networks:
+  hostnet:
